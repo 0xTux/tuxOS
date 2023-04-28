@@ -1,0 +1,31 @@
+# Maintainer: tux <0xtux@pm.me>
+
+pkgname=tuxos-skel
+pkgver=1.0
+pkgrel=1
+pkgdesc="tuxOS configurations"
+arch=('any')
+license=('GPL3')
+makedepends=()
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+#install="${pkgname}.install"
+
+prepare() {
+	cp -af ../skel/. ${srcdir}
+}
+
+package() {
+    local _skeldir=${pkgdir}/etc/skel
+	local _configdir=${_skeldir}/.config
+
+	mkdir -p "$_skeldir" && mkdir -p "$_configdir"
+
+	cp -r ${srcdir}/eww "$_configdir"
+	cp -r ${srcdir}/starship "$_configdir"
+	cp -r ${srcdir}/wezterm "$_configdir"
+	cp -r ${srcdir}/kitty "$_configdir"
+
+    install -Dm 755 ".zshrc" "$_skeldir"
+	install -Dm 644 ".xinitrc" "$_skeldir"
+}

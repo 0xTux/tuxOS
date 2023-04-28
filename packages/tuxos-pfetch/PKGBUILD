@@ -1,0 +1,21 @@
+# Maintainer: tux <0xtux@pm.me>
+
+pkgname=tuxos-pfetch
+pkgver=0.6.0
+pkgrel=1
+pkgdesc="pfetch for tuxOS"
+arch=('any')
+license=('GPL3')
+makedepends=()
+depends=()
+conflicts=()
+provides=("pfetch")
+options=(!strip !emptydirs)
+
+source=('pfetch')
+
+sha256sums=('1b265d6affe214ec101d6ff5892d0ae3fbaaaabc6fed467d91684a8af146cd0c')
+
+package() {
+	install -Dm 755 pfetch   		${pkgdir}/usr/local/bin/pfetch
+}

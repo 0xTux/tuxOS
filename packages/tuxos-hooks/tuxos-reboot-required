@@ -1,0 +1,89 @@
+#!/bin/bash
+
+# Avoid unnecessary reboots: don't notify if an updated package is
+# - not currently running (e.g. alternative kernel)
+# - not in use (e.g. alternative driver)
+
+IsRunningKernel() {
+    cat /proc/cmdline | sed 's|.*/vmlinuz-\(linux[a-z0-9-]*\) .*|\1|'
+}
+
+DoNotify() {
+    local xx
+
+    for xx in "$DESKTOP_SESSION" "$XDG_CURRENT_DESKTOP" ; do
+        if [[ -n "$xx" ]] ; then
+            break
+        fi
+    done
+
+    if [[ -n "$xx" ]] ; then
+        local user userid cmd
+
+        for user in $(/usr/bin/users) ; do
+            userid=$(/usr/bin/id -u $user)
+            cmd=(DISPLAY=:0 DBUS_SESSION_ADDRESS=unix:path=/run/user/$userid/bus /usr/bin/notify-send)
+            cmd+=(--icon=system-reboot --urgency=critical)
+            cmd+=("\"tuxOS\`s core system package upgraded, You need to reboot the machine.\"")
+            /usr/bin/su $user -c "${cmd[*]}"
+        done
+    else
+        # at TTY
+		echo -e "[*] tuxOS\`s core system package upgraded, You need to reboot the machine.">&2
+    fi
+}
+
+Main() {
+    local targets=$(cat)  # list of updated package names from the hook (stdin)
+    local target
+    local running_kernel=""
+
+    # do not notify if the updated package is not in use
+    for target in $targets ; do
+        case "$target" in
+            linux | linux-lts | linux-zen | linux-hardened | linux-rt | linux-rt-lts | linux-lts?? | linux-lts???)
+                # Note: only official and older LTS kernels are checked.
+                if IsRunningKernel "$target" ; then
+                    DoNotify
+                fi
+                ;;
+            nvidia)
+                if IsRunningKernel linux ; then
+                    DoNotify
+                fi
+                ;;
+            nvidia-lts)
+                if IsRunningKernel linux-lts ; then
+                    DoNotify
+                fi
+                ;;
+            amd-ucode)
+                if [ "$(device-info --cpu)" = "AuthenticAMD" ] ; then
+                    DoNotify
+                fi
+                ;;
+            intel-ucode)
+                if [ "$(device-info --cpu)" = "GenuineIntel" ] ; then
+                    DoNotify
+                fi
+                ;;
+            btrfs-progs)
+                # Notify only if btrfs is in use
+                if [ -n "$(/usr/bin/df -hT | awk '{print $2}' | grep -w btrfs)" ] ; then
+                    DoNotify
+                fi
+                ;;
+            wayland | egl-wayland)
+                case "$XDG_SESSION_TYPE" in
+                    x11) ;;
+                    *) DoNotify ;;
+                esac
+                ;;
+            *)
+                DoNotify
+                ;;
+        esac
+    done
+}
+
+Main "$@"

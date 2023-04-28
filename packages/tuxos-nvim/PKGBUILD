@@ -1,0 +1,20 @@
+# Maintainer: tux <0xtux@pm.me>
+
+pkgname=tuxos-nvim
+pkgver=3.10.3
+pkgrel=1
+pkgdesc="tuxOS nvim configuration"
+arch=('any')
+url="https://github.com/AstroNvim/AstroNvim"
+license=('GPL3')
+options=('!strip')
+source=(git+"${url}.git" init.lua)
+sha256sums=('SKIP'
+            '39b1c4bc297cd20858fa60e2261ee5b94e7e7429d6e5702c3cf901ee08db921a')
+
+package() {
+    mkdir -p "$pkgdir/etc/skel/.config/nvim"
+    cp -r AstroNvim/. "$pkgdir/etc/skel/.config/nvim"
+    mkdir -p "$pkgdir/etc/skel/.config/nvim/lua/user"
+    cp init.lua "$pkgdir/etc/skel/.config/nvim/lua/user"
+}

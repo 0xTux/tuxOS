@@ -1,0 +1,37 @@
+# Maintainer: tux <0xtux@pm.me>
+
+pkgname=tuxos-bspwm
+pkgver=1.0
+pkgrel=1
+pkgdesc="Bspwm Configurations for tuxOS"
+arch=('any')
+license=('GPL3')
+makedepends=()
+depends=('bspwm' 'sxhkd' 'polybar' 'rofi' 'dunst')
+provides=("${pkgname}")
+options=(!strip !emptydirs)
+#install="${pkgname}.install"
+
+prepare() {
+    cp -af ../bspwm/. ${srcdir}
+}
+
+package() {
+    local _skeldir=${pkgdir}/etc/skel
+    local _configdir=${_skeldir}/.config
+    local _bspwmdir=${_configdir}/bspwm
+    
+    mkdir -p "$_skeldir" && mkdir -p "$_configdir" && mkdir -p "$_bspwmdir"
+    
+    cp -r ${srcdir}/polybar "$_bspwmdir"
+    cp -r ${srcdir}/scripts "$_bspwmdir"
+    cp -r ${srcdir}/wallpapers "$_bspwmdir"
+    
+    install -Dm 755 bspwmrc "$_bspwmdir"/bspwmrc
+    install -Dm 644 sxhkdrc "$_bspwmdir"/sxhkdrc
+    install -Dm 644 dunstrc "$_bspwmdir"/dunstrc
+    install -Dm 644 launcher.rasi "$_bspwmdir"/launcher.rasi
+    install -Dm 644 powermenu.rasi "$_bspwmdir"/powermenu.rasi
+
+    chmod +x "$_bspwmdir"/scripts/*
+}

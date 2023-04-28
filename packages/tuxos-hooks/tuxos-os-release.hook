@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = filesystem
+
+[Action]
+Description = Add tuxOS specific config.
+When = PostTransaction
+Exec = /usr/bin/tuxos-hooks-runner os-release

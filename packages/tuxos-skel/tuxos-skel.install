@@ -1,0 +1,19 @@
+main() {
+    local _user=`echo ${SUDO_USER:-$(whoami)}`
+    local _gid=`echo ${SUDO_GID}`
+    local _group=`cat /etc/group | grep ${_gid} | cut -d: -f1 | head -1`
+    local _dir="/home/${_user}/.config"
+    local _skel='/etc/skel/.config'
+    
+    mkdir -p ${_dir}
+    cp -rf ${_skel}/* ${_dir}
+    chown -R ${_user}:${_group} ${_dir}/*
+}
+
+post_install() {
+    main
+}
+
+post_upgrade() {
+    main
+}

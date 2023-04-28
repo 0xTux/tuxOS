@@ -1,0 +1,19 @@
+# Maintainer: tux <0xtux@pm.me>
+
+pkgname=tuxos-cursor
+pkgver=2.0.3
+pkgrel=1
+pkgdesc="cursor for tuxOS"
+arch=('any')
+url="https://github.com/ful1e5/Bibata_Cursor"
+license=('GPL3')
+provides=("bibata-cursor-theme-bin" "bibata-cursor-theme")
+conflicts=("bibata-cursor-theme-bin" "bibata-cursor-theme")
+options=('!strip')
+source=("${pkgname%-bin}-$pkgver.tar.gz::$url/releases/download/v$pkgver/Bibata.tar.gz")
+sha256sums=('1664a1e848707e643362eb772a38f077a4cac6362ca39f5705f59e85128b270c')
+
+package() {
+  install -d "$pkgdir/usr/share/icons"
+  cp -r Bibata* "$pkgdir/usr/share/icons"
+}

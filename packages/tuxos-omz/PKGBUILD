@@ -1,0 +1,22 @@
+# Maintainer: tux <0xtux@pm.me>
+
+pkgname=tuxos-omz
+pkgver=1
+pkgrel=1
+pkgdesc="oh my zsh for tuxOS"
+arch=('any')
+url="https://github.com/ohmyzsh/ohmyzsh"
+license=('GPL3')
+options=('!strip')
+source=(git+"${url}.git" git+"https://github.com/zsh-users/zsh-syntax-highlighting.git" git+"https://github.com/zsh-users/zsh-autosuggestions.git")
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+package() {
+    mkdir -p "$pkgdir/etc/skel/.oh-my-zsh"
+    cp -r ohmyzsh/. "$pkgdir/etc/skel/.oh-my-zsh"
+    cp -r zsh-syntax-highlighting "$pkgdir/etc/skel/.oh-my-zsh/custom/plugins"
+    cp -r zsh-autosuggestions "$pkgdir/etc/skel/.oh-my-zsh/custom/plugins"
+    chmod +x "$pkgdir/etc/skel/.oh-my-zsh/oh-my-zsh.sh"
+}

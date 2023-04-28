@@ -1,0 +1,37 @@
+# Maintainer: tux <0xtux@pm.me>
+
+pkgname="tuxos-hooks"
+pkgver=1.0
+pkgrel=1
+pkgdesc='tuxOS hooks'
+arch=('any')
+license=('GPL3')
+
+source=(
+		'tuxos-hooks.hook'
+		'tuxos-os-release.hook'
+		'tuxos-lsb-release.hook'
+		'tuxos-reboot-required.hook'
+		'tuxos-hooks-runner'
+		'tuxos-reboot-required'
+)
+
+sha512sums=('bb8aa5fb891f8398b48dea93b74ad266d154bdf08f5ab70f5dddf9dd3e560d4c788c4fac5b7d10b9c4310d18d3509c0752e174b69391d0b5fc0c7cc631294ad0'
+            '8e4a325294b92c27e8921d5002216c106a85341de5837cfde8a090e62f695f41ed5b5c562443965e289c99f64511a58a7d205484001433d5ae568146b0664c1c'
+            '7205fdc0a29ac46725a97192075c6485563496dd354683c96a204c3e6492a3a1ec880dbcc3f192ab0b50741b7f67e6c0e90bc884653a87935610b5532e5ba3db'
+            '4e47bbc391573be11dc607bd0e3e3716896092f88e8615f57260e3c5f96feffcb79437dbb0e5283e733931a1017a1348ba9af37ddf4e3a57e6005d381f9594ce'
+            '8559011b9d5e7cae185746fcc2d76735e1ce0c63cfb4a98db0bd819c8a6dce4f5331ad16f8e6c2ddb5a7ab2f8d3947159a1e4de6a099b6a5d7e9f3acf169c8f1'
+            '3bffb02739f75e41fa346c7700e1b8a51a066ef5593ce1bee997a0da5c1d4c46a373b86c069fbdee4b432f4c71a5846369ec5db9d3120297ffafb81fc7f9126b')
+
+package() {
+	local hooks=${pkgdir}/usr/share/libalpm/hooks
+	local bin=${pkgdir}/usr/bin
+	
+	install -Dm644 tuxos-hooks.hook           	"$hooks"/tuxos-hooks.hook
+	install -Dm644 tuxos-lsb-release.hook      	"$hooks"/tuxos-lsb-release.hook
+	install -Dm644 tuxos-os-release.hook       	"$hooks"/tuxos-os-release.hook
+	install -Dm644 tuxos-reboot-required.hook  	"$hooks"/tuxos-reboot-required.hook
+	
+	install -Dm755 tuxos-hooks-runner         	"$bin"/tuxos-hooks-runner
+	install -Dm755 tuxos-reboot-required       	"$bin"/tuxos-reboot-required
+}
