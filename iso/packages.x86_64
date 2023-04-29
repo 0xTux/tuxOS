@@ -127,6 +127,7 @@ base-devel
 xorg
 xdg-user-dirs
 kitty
+wezterm
 networkmanager
 network-manager-applet
 os-prober
@@ -153,7 +154,10 @@ mkinitcpio-openswap
 # WM/UI
 sddm
 polybar
+
+# Fonts
 ttf-firacode-nerd
+ttf-liberation
 
 # Audio
 pipewire
@@ -265,3 +269,7 @@ open-vm-tools
 xf86-input-vmmouse
 xf86-video-vmware
 
+# Drivers (Nvidia)
+nvidia-dkms
+nvidia-utils
+nvidia-settings
