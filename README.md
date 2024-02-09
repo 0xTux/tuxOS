@@ -1,3 +1,6 @@
+<p align="center"><b>Migrated to nixOS as the main goal for this project was to have everything pre-configured.</b><br>
+Here's my <a href="https://github.com/0xTux/nixos-config">nixOS Flake Configuration
+<p>
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/0xTux/tuxOS/main/assets/logo.png" height="128" alt="Archcraft">
